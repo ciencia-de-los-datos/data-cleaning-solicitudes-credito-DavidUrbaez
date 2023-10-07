@@ -18,7 +18,7 @@ def clean_data():
 
     df = pd.read_csv("solicitudes_credito.csv", sep=";", index_col=0)
 
-    df['fecha_de_beneficio'] = pd.to_datetime(df['fecha_de_beneficio'], dayfirst=True,format='mixed')
+    df['fecha_de_beneficio'] = pd.to_datetime(df['fecha_de_beneficio'], dayfirst=True, format='mixed')
 
     df['sexo'] = df['sexo'].str.strip().str.lower()
 
@@ -33,10 +33,13 @@ def clean_data():
 
     df['barrio'] = (
         df['barrio'].str.lower()
-        .str.strip(" _-")
+        # .str.replace("san jose de la cima no. ", "san jose de la cima no. XXXX")  # Check
+        # .str.replace("el salado ", "el salado XXXXX")  # Check
+        .str.replace("antonio nariño", "santonio nariño XXXX")  # Check
+        # .str.strip(" _-")  # Check
         .str.replace(" ", "_").str.replace("-", "_")
         .str.replace(r"[áéíóúñ¿]", "*", regex=True)
-        .str.replace("belen", "bel*n")
+        # .str.replace("belen", "bel*n") # Check
         .str.replace("andalucia", "andaluc*a")
         .str.replace("boyaca", "boyac*")
         .str.replace("'campo_valdes_no._1'", 'campo_vald*s_no.1', regex=False)
@@ -58,7 +61,6 @@ def clean_data():
     df = df.drop_duplicates()
 
     return df
-
 
 
 clean_data()
